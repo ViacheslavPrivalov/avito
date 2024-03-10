@@ -4,9 +4,10 @@ import { AppService } from "./app.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
 import { UsersModule } from "./users/users.module";
-import { AdsModule } from './ads/ads.module';
-import { AuthModule } from './auth/auth.module';
-import { CommentsModule } from './comments/comments.module';
+import { AdsModule } from "./ads/ads.module";
+import { AuthModule } from "./auth/auth.module";
+import { CommentsModule } from "./comments/comments.module";
+import { UserEntity } from "./users/model/User.entity";
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { CommentsModule } from './comments/comments.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [],
+      entities: [__dirname + "**/**/*.entity{.js, .ts}"],
+      autoLoadEntities: true,
       synchronize: true,
     }),
     UsersModule,
