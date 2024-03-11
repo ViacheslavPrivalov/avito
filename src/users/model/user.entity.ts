@@ -1,5 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Role } from "./Role.enum";
+import { CommentEntity } from "src/comments/model/comment.entity";
+import { AdEntity } from "src/ads/model/ad.entity";
 
 @Entity({ name: "users" })
 export class UserEntity {
@@ -23,4 +25,10 @@ export class UserEntity {
 
   @Column()
   role: Role;
+
+  @OneToMany(() => AdEntity, (ad) => ad.author)
+  ads: AdEntity[];
+
+  @OneToMany(() => CommentEntity, (comment) => comment.author)
+  comments: CommentEntity[];
 }
