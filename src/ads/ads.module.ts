@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { AdsController } from './controllers/ads/ads.controller';
-import { AdsService } from './services/ads/ads.service';
+import { Module } from "@nestjs/common";
+import { AdsController } from "./controllers/ads.controller";
+import { AdsService } from "./services/ads.service";
 
 @Module({
   controllers: [AdsController],
-  providers: [AdsService]
+  providers: [AdsService],
 })
 export class AdsModule {}
