@@ -14,25 +14,29 @@ import { NewPassword } from "../dto/new-password.dto";
 import { UpdateUser } from "../dto/update-user.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { AuthGuard } from "src/auth/guards/auth.guard";
+import { User } from "../dto/user.dto";
 
 @UseGuards(AuthGuard)
 @Controller("users")
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Post("set-password")
-  setPassword(@Body() newPassword: NewPassword) {
-    return this.usersService.setPassword(newPassword);
+  @Post("set_password")
+  setPassword(@Body() newPassword: NewPassword, @Request() req) {
+    return this.usersService.setPassword(newPassword, req.user);
   }
 
   @Get("me")
-  getUser(@Request() req) {
+  getUser(@Request() req): User {
     return this.usersService.getUser(req.user);
   }
 
   @Patch("me")
-  updateUser(@Body() updateUser: UpdateUser) {
-    return this.usersService.updateUser(updateUser);
+  updateUser(
+    @Body() updateUser: UpdateUser,
+    @Request() req
+  ): Promise<UpdateUser> {
+    return this.usersService.updateUser(updateUser, req.user);
   }
 
   @Patch("me/image")

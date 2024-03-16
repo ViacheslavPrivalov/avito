@@ -1,3 +1,4 @@
+import { UpdateUser } from "../dto/update-user.dto";
 import { User } from "../dto/user.dto";
 import { UserEntity } from "../model/User.entity";
 
