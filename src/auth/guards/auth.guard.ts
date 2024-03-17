@@ -1,9 +1,4 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { UsersService } from "src/users/services/users.service";
 import * as bcrypt from "bcrypt";
 import { Reflector } from "@nestjs/core";
@@ -16,21 +11,19 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isPublic = this.reflector.get<boolean>(
-      "isPublic",
-      context.getHandler()
-    );
+    const isPublic = this.reflector.get<boolean>("isPublic", context.getHandler());
 
     if (isPublic) return true;
 
-    const req = context.switchToHttp().getRequest();
-    const authHeader = req.headers.authorization;
-
-    const [scheme, credentials] = authHeader.split(" ");
-
     try {
-      if (scheme !== "Basic" || !credentials)
-        throw new Error("Пользователь не авторизован");
+      const req = context.switchToHttp().getRequest();
+      const authHeader = req.headers.authorization;
+
+      if (!authHeader) throw new Error("Пользователь не авторизован");
+
+      const [scheme, credentials] = authHeader.split(" ");
+
+      if (scheme !== "Basic" || !credentials) throw new Error("Не удалось верифицировать пользователя");
 
       const decodedCredentials = atob(credentials);
       const [username, password] = decodedCredentials.split(":");
@@ -50,8 +43,7 @@ export class AuthGuard implements CanActivate {
 
     const isValidPassword = await bcrypt.compare(password, user.password);
 
-    if (!isValidPassword)
-      throw new Error("Не удалось верифицировать пользователя");
+    if (!isValidPassword) throw new Error("Неверный пароль");
 
     return user;
   }
