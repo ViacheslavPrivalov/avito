@@ -29,8 +29,6 @@ export class CommentsService {
       },
     });
 
-    console.log(entities);
-
     return this.commentsMapper.toCommentsDto(count, entities);
   }
 
@@ -51,11 +49,29 @@ export class CommentsService {
     return this.commentsMapper.toCommentDto(newComment);
   }
 
-  deleteComment(adId: number, commentId: number) {
-    throw new Error("Method not implemented.");
+  async deleteComment(adId: number, commentId: number) {
+    const comment = await this.commentsRepository.findOne({ where: { id: commentId, adId } });
+
+    if (!comment) throw new NotFoundException("Комментарий не был найден");
+
+    await this.commentsRepository.remove(comment);
   }
 
-  updateComment(adId: number, commentId: number, dto: CreateOrUpdateComment) {
-    throw new Error("Method not implemented.");
+  async updateComment(adId: number, commentId: number, dto: CreateOrUpdateComment) {
+    const comment = await this.commentsRepository.findOne({
+      relations: { author: true },
+      where: {
+        id: commentId,
+        adId,
+      },
+    });
+
+    if (!comment) throw new NotFoundException("Комментарий не был найден");
+
+    comment.text = dto.text;
+
+    await this.commentsRepository.save(comment);
+
+    return this.commentsMapper.toCommentDto(comment);
   }
 }
