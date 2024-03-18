@@ -16,6 +16,7 @@ export class AdEntity {
   @Column()
   description: string;
 
+  @Column()
   image: string;
 
   @ManyToOne(() => UserEntity, (user) => user.ads)

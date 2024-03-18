@@ -1,4 +1,4 @@
-export class comment {
+export class Comment {
   readonly author: number;
   readonly authorImage: string;
   readonly authorFirstName: string;
