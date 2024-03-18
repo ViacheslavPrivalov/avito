@@ -39,9 +39,7 @@ export class AdsService {
     const [entities, count] = await this.adsRepository.findAndCount({
       relations: { author: true },
       where: {
-        author: {
-          id: user.id,
-        },
+        authorId: user.id,
       },
     });
 
@@ -80,9 +78,7 @@ export class AdsService {
     const adEntity = await this.adsRepository.findOne({
       relations: { author: true },
       where: {
-        author: {
-          id: user.id,
-        },
+        authorId: user.id,
         id,
       },
     });

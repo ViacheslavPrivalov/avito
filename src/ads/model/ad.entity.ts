@@ -16,8 +16,11 @@ export class AdEntity {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ nullable: true })
   image: string;
+
+  @Column()
+  authorId: number;
 
   @ManyToOne(() => UserEntity, (user) => user.ads)
   @JoinColumn()
