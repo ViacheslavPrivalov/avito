@@ -8,12 +8,14 @@ import { AdsMapper } from "../mappers/ads.mapper";
 import { Ad } from "../dto/ad.dto";
 import { Ads } from "../dto/ads.dto";
 import { ExtendedAd } from "../dto/extended-ad.dto";
+import { ImagesService } from "src/files/services/images.service";
 
 @Injectable()
 export class AdsService {
   constructor(
     @InjectRepository(AdEntity) private adsRepository: Repository<AdEntity>,
-    private adsMapper: AdsMapper
+    private adsMapper: AdsMapper,
+    private imagesService: ImagesService
   ) {}
 
   async getAllAds(): Promise<Ads> {
@@ -22,10 +24,12 @@ export class AdsService {
     return this.adsMapper.toAdsDto(count, entities);
   }
 
-  async addAd(properties: CreateOrUpdateAd, image: any, user: UserEntity): Promise<Ad> {
+  async addAd(properties: CreateOrUpdateAd, image: Express.Multer.File, user: UserEntity): Promise<Ad> {
+    const filename = this.imagesService.createFilename(image);
+
     const newAd = this.adsRepository.create({
       ...properties,
-      image: "",
+      image: "/" + filename,
       author: user,
     });
 
@@ -46,20 +50,20 @@ export class AdsService {
     return this.adsMapper.toAdsDto(count, entities);
   }
 
-  async getAds(id: number, user: UserEntity): Promise<ExtendedAd> {
-    const adEntity = await this.getAdByIdForUser(id, user);
+  async getAds(id: number): Promise<ExtendedAd> {
+    const adEntity = await this.getAdByIdForUser(id);
 
     return this.adsMapper.toExtendedAdDto(adEntity);
   }
 
-  async removeAd(id: number, user: UserEntity) {
-    const adEntity = await this.getAdByIdForUser(id, user);
+  async removeAd(id: number) {
+    const adEntity = await this.getAdByIdForUser(id);
 
     await this.adsRepository.remove(adEntity);
   }
 
-  async updateAds(id: number, dto: CreateOrUpdateAd, user: UserEntity) {
-    const adEntity = await this.getAdByIdForUser(id, user);
+  async updateAds(id: number, dto: CreateOrUpdateAd) {
+    const adEntity = await this.getAdByIdForUser(id);
 
     for (const prop in dto) {
       adEntity[prop] = dto[prop];
@@ -70,15 +74,22 @@ export class AdsService {
     return this.adsMapper.toAdDto(adEntity);
   }
 
-  updateImage(id: number, image: any) {
-    throw new Error("Method not implemented.");
+  async updateImage(id: number, image: Express.Multer.File) {
+    const adEntity = await this.getAdByIdForUser(id);
+
+    const filename = this.imagesService.createFilename(image);
+
+    adEntity.image = "/" + filename;
+
+    await this.adsRepository.save(adEntity);
+
+    return image.buffer;
   }
 
-  private async getAdByIdForUser(id: number, user: UserEntity): Promise<AdEntity> {
+  public async getAdByIdForUser(id: number): Promise<AdEntity> {
     const adEntity = await this.adsRepository.findOne({
       relations: { author: true },
       where: {
-        authorId: user.id,
         id,
       },
     });

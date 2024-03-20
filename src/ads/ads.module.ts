@@ -5,10 +5,11 @@ import { AdsMapper } from "./mappers/ads.mapper";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AdEntity } from "./model/ad.entity";
 import { UsersModule } from "src/users/users.module";
+import { FilesModule } from "src/files/files.module";
 
 @Module({
   controllers: [AdsController],
   providers: [AdsService, AdsMapper],
-  imports: [TypeOrmModule.forFeature([AdEntity]), UsersModule],
+  imports: [TypeOrmModule.forFeature([AdEntity]), UsersModule, FilesModule],
 })
 export class AdsModule {}

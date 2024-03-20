@@ -8,11 +8,17 @@ import { AdsModule } from "./ads/ads.module";
 import { AuthModule } from "./auth/auth.module";
 import { CommentsModule } from "./comments/comments.module";
 import { UserEntity } from "./users/model/User.entity";
+import { ServeStaticModule } from "@nestjs/serve-static";
+import * as path from "path";
+import { FilesModule } from "./files/files.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, "..", "static"),
     }),
     TypeOrmModule.forRoot({
       type: "postgres",
@@ -29,6 +35,7 @@ import { UserEntity } from "./users/model/User.entity";
     AdsModule,
     AuthModule,
     CommentsModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

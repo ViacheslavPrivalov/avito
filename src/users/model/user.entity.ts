@@ -26,6 +26,9 @@ export class UserEntity {
   @Column()
   role: Role;
 
+  @Column({ nullable: true })
+  image: string;
+
   @OneToMany(() => AdEntity, (ad) => ad.author)
   ads: AdEntity[];
 

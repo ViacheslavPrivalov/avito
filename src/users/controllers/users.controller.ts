@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Patch,
-  Post,
-  Request,
-  UploadedFile,
-  UseGuards,
-  UseInterceptors,
-} from "@nestjs/common";
+import { Body, Controller, Get, Patch, Post, Request, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { UsersService } from "../services/users.service";
 import { NewPassword } from "../dto/new-password.dto";
 import { UpdateUser } from "../dto/update-user.dto";
@@ -32,16 +22,13 @@ export class UsersController {
   }
 
   @Patch("me")
-  updateUser(
-    @Body() updateUser: UpdateUser,
-    @Request() req
-  ): Promise<UpdateUser> {
+  updateUser(@Body() updateUser: UpdateUser, @Request() req): Promise<UpdateUser> {
     return this.usersService.updateUser(updateUser, req.user);
   }
 
   @Patch("me/image")
   @UseInterceptors(FileInterceptor("image"))
-  updateUserImage(@UploadedFile() image: any) {
-    return this.usersService.updateUserImage(image);
+  updateUserImage(@UploadedFile() image: Express.Multer.File, @Request() req) {
+    return this.usersService.updateUserImage(image, req.user);
   }
 }

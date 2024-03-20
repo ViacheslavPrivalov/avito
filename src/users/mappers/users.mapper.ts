@@ -11,7 +11,7 @@ export class UsersMapper {
       lastName: userEntity.lastName,
       phone: userEntity.phone,
       role: userEntity.role,
-      image: "",
+      image: userEntity.image,
     };
 
     return dto;

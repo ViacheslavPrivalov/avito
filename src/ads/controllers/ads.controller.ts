@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Request, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Request,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from "@nestjs/common";
 import { AdsService } from "../services/ads.service";
 import { CreateOrUpdateAd } from "../dto/create-or-update-ad.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
@@ -19,7 +32,7 @@ export class AdsController {
 
   @Post()
   @UseInterceptors(FileInterceptor("image"))
-  addAd(@Body() properties: CreateOrUpdateAd, @UploadedFile() image: any, @Request() req) {
+  addAd(@Body() properties: CreateOrUpdateAd, @UploadedFile() image: Express.Multer.File, @Request() req) {
     return this.adsService.addAd(properties, image, req.user);
   }
 
@@ -30,22 +43,22 @@ export class AdsController {
 
   @Get(":id")
   getAds(@Param("id", ParseIntPipe) id: number, @Request() req): Promise<ExtendedAd> {
-    return this.adsService.getAds(id, req.user);
+    return this.adsService.getAds(id);
   }
 
   @Delete(":id")
   removeAd(@Param("id", ParseIntPipe) id: number, @Request() req) {
-    return this.adsService.removeAd(id, req.user);
+    return this.adsService.removeAd(id);
   }
 
   @Patch(":id")
   updateAds(@Param("id", ParseIntPipe) id: number, @Body() dto: CreateOrUpdateAd, @Request() req) {
-    return this.adsService.updateAds(id, dto, req.user);
+    return this.adsService.updateAds(id, dto);
   }
 
   @Patch(":id/image")
   @UseInterceptors(FileInterceptor("image"))
-  updateImage(@Param("id") id: number, @UploadedFile() image: any) {
+  updateImage(@Param("id") id: number, @UploadedFile() image: Express.Multer.File) {
     return this.adsService.updateImage(id, image);
   }
 }
