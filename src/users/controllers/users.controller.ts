@@ -4,7 +4,8 @@ import { NewPassword } from "../dto/new-password.dto";
 import { UpdateUser } from "../dto/update-user.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { AuthGuard } from "src/auth/guards/auth.guard";
-import { User } from "../dto/user.dto";
+import { UserEntity } from "../model/User.entity";
+import { User } from "src/auth/decorators/user.decorator";
 
 @UseGuards(AuthGuard)
 @Controller("users")
@@ -12,23 +13,23 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post("set_password")
-  setPassword(@Body() newPassword: NewPassword, @Request() req) {
-    return this.usersService.setPassword(newPassword, req.user);
+  setPassword(@Body() newPassword: NewPassword, @User() user: UserEntity) {
+    return this.usersService.setPassword(newPassword, user);
   }
 
   @Get("me")
-  getUser(@Request() req): User {
-    return this.usersService.getUser(req.user);
+  getUser(@User() user: UserEntity) {
+    return this.usersService.getUser(user);
   }
 
   @Patch("me")
-  updateUser(@Body() updateUser: UpdateUser, @Request() req): Promise<UpdateUser> {
-    return this.usersService.updateUser(updateUser, req.user);
+  updateUser(@Body() updateUser: UpdateUser, @User() user: UserEntity): Promise<UpdateUser> {
+    return this.usersService.updateUser(updateUser, user);
   }
 
   @Patch("me/image")
   @UseInterceptors(FileInterceptor("image"))
-  updateUserImage(@UploadedFile() image: Express.Multer.File, @Request() req) {
-    return this.usersService.updateUserImage(image, req.user);
+  updateUserImage(@UploadedFile() image: Express.Multer.File, @User() user: UserEntity) {
+    return this.usersService.updateUserImage(image, user);
   }
 }

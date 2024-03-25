@@ -18,6 +18,8 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { AuthGuard } from "src/auth/guards/auth.guard";
 import { Public } from "src/auth/decorators/public.decorator";
 import { ExtendedAd } from "../dto/extended-ad.dto";
+import { User } from "src/auth/decorators/user.decorator";
+import { UserEntity } from "src/users/model/User.entity";
 
 @UseGuards(AuthGuard)
 @Controller("ads")
@@ -32,13 +34,13 @@ export class AdsController {
 
   @Post()
   @UseInterceptors(FileInterceptor("image"))
-  addAd(@Body() properties: CreateOrUpdateAd, @UploadedFile() image: Express.Multer.File, @Request() req) {
-    return this.adsService.addAd(properties, image, req.user);
+  addAd(@Body() properties: CreateOrUpdateAd, @UploadedFile() image: Express.Multer.File, @User() user: UserEntity) {
+    return this.adsService.addAd(properties, image, user);
   }
 
   @Get("me")
-  getAdsMe(@Request() req) {
-    return this.adsService.getAdsMe(req.user);
+  getAdsMe(@User() user: UserEntity) {
+    return this.adsService.getAdsMe(user);
   }
 
   @Get(":id")
@@ -47,18 +49,18 @@ export class AdsController {
   }
 
   @Delete(":id")
-  async removeAd(@Param("id", ParseIntPipe) id: number, @Request() req) {
-    return this.adsService.removeAd(id, req.user);
+  async removeAd(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
+    return this.adsService.removeAd(id, user);
   }
 
   @Patch(":id")
-  updateAds(@Param("id", ParseIntPipe) id: number, @Body() dto: CreateOrUpdateAd, @Request() req) {
-    return this.adsService.updateAds(id, dto, req.user);
+  updateAds(@Param("id", ParseIntPipe) id: number, @Body() dto: CreateOrUpdateAd, @User() user: UserEntity) {
+    return this.adsService.updateAds(id, dto, user);
   }
 
   @Patch(":id/image")
   @UseInterceptors(FileInterceptor("image"))
-  updateImage(@Param("id") id: number, @UploadedFile() image: Express.Multer.File, @Request() req) {
-    return this.adsService.updateImage(id, image, req.user);
+  updateImage(@Param("id") id: number, @UploadedFile() image: Express.Multer.File, @User() user: UserEntity) {
+    return this.adsService.updateImage(id, image, user);
   }
 }
