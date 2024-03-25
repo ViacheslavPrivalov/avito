@@ -10,8 +10,8 @@ export class CommentsController {
   constructor(private commentsService: CommentsService) {}
 
   @Get(":id/comments")
-  getComments(@Param("id") id: number, @Request() req) {
-    return this.commentsService.getComments(id, req.user);
+  getComments(@Param("id") id: number) {
+    return this.commentsService.getComments(id);
   }
 
   @Post(":id/comments")
@@ -20,16 +20,17 @@ export class CommentsController {
   }
 
   @Delete(":adId/comments/:commentId")
-  deleteComment(@Param("adId") adId: number, @Param("commentId") commentId: number) {
-    return this.commentsService.deleteComment(adId, commentId);
+  deleteComment(@Param("adId") adId: number, @Param("commentId") commentId: number, @Request() req) {
+    return this.commentsService.deleteComment(adId, commentId, req.user);
   }
 
   @Patch(":adId/comments/:commentId")
   updateComment(
     @Param("adId") adId: number,
     @Param("commentId") commentId: number,
-    @Body() dto: CreateOrUpdateComment
+    @Body() dto: CreateOrUpdateComment,
+    @Request() req
   ) {
-    return this.commentsService.updateComment(adId, commentId, dto);
+    return this.commentsService.updateComment(adId, commentId, dto, req.user);
   }
 }

@@ -10,7 +10,6 @@ import { Ads } from "../dto/ads.dto";
 import { ExtendedAd } from "../dto/extended-ad.dto";
 import { ImagesService } from "src/files/services/images.service";
 import { Action, CaslAbilityFactory } from "src/auth/services/casl-ability.factory";
-import { ForbiddenError } from "@casl/ability";
 
 @Injectable()
 export class AdsService {
