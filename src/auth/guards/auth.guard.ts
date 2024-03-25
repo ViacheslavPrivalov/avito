@@ -6,8 +6,8 @@ import { Reflector } from "@nestjs/core";
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private usersService: UsersService,
-    private reflector: Reflector
+    private reflector: Reflector,
+    private usersService: UsersService
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
 
       if (scheme !== "Basic" || !credentials) throw new Error("Не удалось верифицировать пользователя");
 
-      const decodedCredentials = atob(credentials);
+      const decodedCredentials = Buffer.from(credentials, "base64").toString();
       const [username, password] = decodedCredentials.split(":");
 
       const user = await this.verifyUser(username, password);

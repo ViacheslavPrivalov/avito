@@ -19,9 +19,15 @@ export class CommentEntity {
   @Column()
   adId: number;
 
-  @ManyToOne(() => UserEntity, (user) => user.comments)
+  @ManyToOne(() => UserEntity, (user) => user.comments, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+  })
   author: UserEntity;
 
-  @ManyToOne(() => AdEntity, (ad) => ad.comments)
+  @ManyToOne(() => AdEntity, (ad) => ad.comments, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+  })
   ad: AdEntity;
 }

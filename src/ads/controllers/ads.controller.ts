@@ -42,23 +42,23 @@ export class AdsController {
   }
 
   @Get(":id")
-  getAds(@Param("id", ParseIntPipe) id: number, @Request() req): Promise<ExtendedAd> {
+  getAds(@Param("id", ParseIntPipe) id: number): Promise<ExtendedAd> {
     return this.adsService.getAds(id);
   }
 
   @Delete(":id")
-  removeAd(@Param("id", ParseIntPipe) id: number, @Request() req) {
-    return this.adsService.removeAd(id);
+  async removeAd(@Param("id", ParseIntPipe) id: number, @Request() req) {
+    return this.adsService.removeAd(id, req.user);
   }
 
   @Patch(":id")
   updateAds(@Param("id", ParseIntPipe) id: number, @Body() dto: CreateOrUpdateAd, @Request() req) {
-    return this.adsService.updateAds(id, dto);
+    return this.adsService.updateAds(id, dto, req.user);
   }
 
   @Patch(":id/image")
   @UseInterceptors(FileInterceptor("image"))
-  updateImage(@Param("id") id: number, @UploadedFile() image: Express.Multer.File) {
-    return this.adsService.updateImage(id, image);
+  updateImage(@Param("id") id: number, @UploadedFile() image: Express.Multer.File, @Request() req) {
+    return this.adsService.updateImage(id, image, req.user);
   }
 }

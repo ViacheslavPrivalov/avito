@@ -23,15 +23,19 @@ export class UserEntity {
   @Column()
   phone: string;
 
-  @Column()
+  @Column({ type: "enum", enum: Role, default: Role.USER })
   role: Role;
 
   @Column({ nullable: true })
   image: string;
 
-  @OneToMany(() => AdEntity, (ad) => ad.author)
+  @OneToMany(() => AdEntity, (ad) => ad.author, {
+    cascade: ["update", "remove"],
+  })
   ads: AdEntity[];
 
-  @OneToMany(() => CommentEntity, (comment) => comment.author)
+  @OneToMany(() => CommentEntity, (comment) => comment.author, {
+    cascade: ["update", "remove"],
+  })
   comments: CommentEntity[];
 }

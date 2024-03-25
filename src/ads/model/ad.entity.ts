@@ -22,10 +22,15 @@ export class AdEntity {
   @Column()
   authorId: number;
 
-  @ManyToOne(() => UserEntity, (user) => user.ads)
+  @ManyToOne(() => UserEntity, (user) => user.ads, {
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+  })
   @JoinColumn()
   author: UserEntity;
 
-  @OneToMany(() => CommentEntity, (comment) => comment.ad)
+  @OneToMany(() => CommentEntity, (comment) => comment.ad, {
+    cascade: ["update", "remove"],
+  })
   comments: CommentEntity[];
 }
