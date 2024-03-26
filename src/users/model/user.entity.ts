@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Role } from "./Role.enum";
 import { CommentEntity } from "src/comments/model/comment.entity";
 import { AdEntity } from "src/ads/model/ad.entity";
@@ -27,7 +27,7 @@ export class UserEntity {
   role: Role;
 
   @Column({ nullable: true })
-  image: string;
+  photo: string;
 
   @OneToMany(() => AdEntity, (ad) => ad.author, {
     cascade: ["update", "remove"],

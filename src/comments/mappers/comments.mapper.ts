@@ -6,7 +6,7 @@ export class CommentsMapper {
   toCommentDto(commentEntity: CommentEntity): Comment {
     const dto: Comment = {
       author: commentEntity.author.id,
-      authorImage: commentEntity.author.image,
+      authorImage: commentEntity.author.photo,
       authorFirstName: commentEntity.author.firstName,
       createdAt: commentEntity.createdAt,
       pk: commentEntity.id,

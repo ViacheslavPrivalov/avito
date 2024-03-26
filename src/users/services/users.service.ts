@@ -47,9 +47,14 @@ export class UsersService {
     return updateUser;
   }
   async updateUserImage(image: Express.Multer.File, user: UserEntity) {
-    const filename = this.imagesService.createFilename(image);
-    user.image = "/" + filename;
-    await this.usersRepository.save(user);
+    if (user.photo) {
+      const imageIdToUpdate = Number(user.photo.slice(-1));
+      await this.imagesService.updateImage(imageIdToUpdate, image);
+    } else {
+      const userPhoto = await this.imagesService.saveImage(image);
+      user.photo = `/image/${userPhoto.id}`;
+      await this.usersRepository.save(user);
+    }
   }
 
   async getUserByUsername(username: string): Promise<UserEntity> {

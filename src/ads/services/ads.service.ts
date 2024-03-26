@@ -27,11 +27,11 @@ export class AdsService {
   }
 
   async addAd(properties: CreateOrUpdateAd, image: Express.Multer.File, user: UserEntity): Promise<Ad> {
-    const filename = this.imagesService.createFilename(image);
+    const adImage = await this.imagesService.saveImage(image);
 
     const newAd = this.adsRepository.create({
       ...properties,
-      image: "/" + filename,
+      image: `/image/${adImage.id}`,
       author: user,
     });
 
@@ -88,13 +88,10 @@ export class AdsService {
     if (!this.isAllowed(Action.Update, adEntity, user))
       throw new ForbiddenException("У вас нет прав доступа или объявление вам не принадлежит");
 
-    const filename = this.imagesService.createFilename(image);
+    const imageIdToUpdate = Number(adEntity.image.slice(-1));
+    const updatedAdImage = await this.imagesService.updateImage(imageIdToUpdate, image);
 
-    adEntity.image = "/" + filename;
-
-    await this.adsRepository.save(adEntity);
-
-    return image.buffer;
+    return updatedAdImage.data;
   }
 
   public async getAdById(id: number): Promise<AdEntity> {
