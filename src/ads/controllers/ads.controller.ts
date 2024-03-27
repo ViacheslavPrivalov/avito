@@ -4,10 +4,8 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
-  Request,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -20,6 +18,7 @@ import { Public } from "src/auth/decorators/public.decorator";
 import { ExtendedAd } from "../dto/extended-ad.dto";
 import { User } from "src/auth/decorators/user.decorator";
 import { UserEntity } from "src/users/model/User.entity";
+import { ParseIdPipe } from "src/validation/pipes/parseId.pipe";
 
 @UseGuards(AuthGuard)
 @Controller("ads")
@@ -44,17 +43,17 @@ export class AdsController {
   }
 
   @Get(":id")
-  getAds(@Param("id", ParseIntPipe) id: number): Promise<ExtendedAd> {
+  getAds(@Param("id", ParseIdPipe) id: number): Promise<ExtendedAd> {
     return this.adsService.getAds(id);
   }
 
   @Delete(":id")
-  async removeAd(@Param("id", ParseIntPipe) id: number, @User() user: UserEntity) {
+  async removeAd(@Param("id", ParseIdPipe) id: number, @User() user: UserEntity) {
     return this.adsService.removeAd(id, user);
   }
 
   @Patch(":id")
-  updateAds(@Param("id", ParseIntPipe) id: number, @Body() dto: CreateOrUpdateAd, @User() user: UserEntity) {
+  updateAds(@Param("id", ParseIdPipe) id: number, @Body() dto: CreateOrUpdateAd, @User() user: UserEntity) {
     return this.adsService.updateAds(id, dto, user);
   }
 

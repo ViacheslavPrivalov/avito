@@ -5,6 +5,7 @@ import { AuthGuard } from "src/auth/guards/auth.guard";
 import { Comment } from "../dto/comment.dto";
 import { UserEntity } from "src/users/model/User.entity";
 import { User } from "src/auth/decorators/user.decorator";
+import { ParseIdPipe } from "src/validation/pipes/parseId.pipe";
 
 @UseGuards(AuthGuard)
 @Controller("ads")
@@ -12,24 +13,32 @@ export class CommentsController {
   constructor(private commentsService: CommentsService) {}
 
   @Get(":id/comments")
-  getComments(@Param("id") id: number) {
+  getComments(@Param("id", ParseIdPipe) id: number) {
     return this.commentsService.getComments(id);
   }
 
   @Post(":id/comments")
-  addComment(@Param("id") id: number, @Body() dto: CreateOrUpdateComment, @User() user: UserEntity): Promise<Comment> {
+  addComment(
+    @Param("id", ParseIdPipe) id: number,
+    @Body() dto: CreateOrUpdateComment,
+    @User() user: UserEntity
+  ): Promise<Comment> {
     return this.commentsService.addComment(id, dto, user);
   }
 
   @Delete(":adId/comments/:commentId")
-  deleteComment(@Param("adId") adId: number, @Param("commentId") commentId: number, @User() user: UserEntity) {
+  deleteComment(
+    @Param("adId", ParseIdPipe) adId: number,
+    @Param("commentId", ParseIdPipe) commentId: number,
+    @User() user: UserEntity
+  ) {
     return this.commentsService.deleteComment(adId, commentId, user);
   }
 
   @Patch(":adId/comments/:commentId")
   updateComment(
-    @Param("adId") adId: number,
-    @Param("commentId") commentId: number,
+    @Param("adId", ParseIdPipe) adId: number,
+    @Param("commentId", ParseIdPipe) commentId: number,
     @Body() dto: CreateOrUpdateComment,
     @User() user: UserEntity
   ) {
