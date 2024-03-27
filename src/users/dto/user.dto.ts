@@ -1,4 +1,4 @@
-import { Role } from "../model/Role.enum";
+import { Role } from "../model/User.entity";
 
 export class User {
   readonly id: number;

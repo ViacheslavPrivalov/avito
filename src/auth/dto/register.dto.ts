@@ -1,4 +1,4 @@
-import { Role } from "src/users/model/Role.enum";
+import { Role } from "src/users/model/User.entity";
 
 export class Register {
   readonly username: string;

@@ -1,7 +1,11 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Role } from "./Role.enum";
 import { CommentEntity } from "src/comments/model/comment.entity";
 import { AdEntity } from "src/ads/model/ad.entity";
+
+export enum Role {
+  USER = "user",
+  ADMIN = "admin",
+}
 
 @Entity({ name: "users" })
 export class UserEntity {
