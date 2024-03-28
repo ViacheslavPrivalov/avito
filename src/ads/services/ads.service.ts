@@ -10,6 +10,7 @@ import { Ads } from "../dto/ads.dto";
 import { ExtendedAd } from "../dto/extended-ad.dto";
 import { ImagesService } from "src/files/services/images.service";
 import { Action, CaslAbilityFactory } from "src/auth/services/casl-ability.factory";
+import { AdNotFoundException } from "src/validation/exceptions/ad-not-found.exception";
 
 @Injectable()
 export class AdsService {
@@ -102,7 +103,7 @@ export class AdsService {
       },
     });
 
-    if (!adEntity) throw new NotFoundException("Объявление не было найдено");
+    if (!adEntity) throw new AdNotFoundException();
 
     return adEntity;
   }

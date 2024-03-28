@@ -8,6 +8,7 @@ import { CommentsMapper } from "../mappers/comments.mapper";
 import { Comment } from "../dto/comment.dto";
 import { AdsService } from "src/ads/services/ads.service";
 import { Action, CaslAbilityFactory } from "src/auth/services/casl-ability.factory";
+import { CommentNotFoundException } from "src/validation/exceptions/comment-not-found.exception";
 
 @Injectable()
 export class CommentsService {
@@ -72,7 +73,7 @@ export class CommentsService {
       where: { adId, id: commentId },
     });
 
-    if (!commentEntity) throw new NotFoundException("Комментарий не был найден");
+    if (!commentEntity) throw new CommentNotFoundException();
 
     return commentEntity;
   }

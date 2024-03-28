@@ -6,23 +6,20 @@ import { Register } from "../dto/register.dto";
 import * as bcrypt from "bcrypt";
 import { Login } from "../dto/login.dto";
 import { UsersService } from "src/users/services/users.service";
+import { AuthorizationException } from "src/validation/exceptions/authorization.exception";
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
-    private usersRepository: Repository<UserEntity>,
-    private usersService: UsersService
+    private usersRepository: Repository<UserEntity>
   ) {}
 
   async register(dto: Register) {
-    const candidate = await this.usersService.getUserByUsername(dto.username);
+    const candidate = await this.usersRepository.findOneBy({ username: dto.username });
 
     if (candidate) {
-      throw new HttpException(
-        "Пользователь с таким email уже существует",
-        HttpStatus.BAD_REQUEST
-      );
+      throw new AuthorizationException("Пользователь с таким email уже существует");
     }
 
     const hashPassword = await bcrypt.hash(dto.password, 5);
@@ -35,17 +32,12 @@ export class AuthService {
   }
 
   async login(dto: Login) {
-    const user = await this.usersService.getUserByUsername(dto.username);
+    const user = await this.usersRepository.findOneBy({ username: dto.username });
 
-    if (!user) {
-      throw new HttpException(
-        "Пользователь с таким email не был найден",
-        HttpStatus.NOT_FOUND
-      );
-    }
+    if (!user) throw new AuthorizationException("Неверный email");
+
     const usersPassword = await bcrypt.compare(dto.password, user.password);
 
-    if (!usersPassword)
-      throw new HttpException("Неверный пароль", HttpStatus.BAD_REQUEST);
+    if (!usersPassword) throw new AuthorizationException("Неверный пароль");
   }
 }

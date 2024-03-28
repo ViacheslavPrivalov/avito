@@ -18,7 +18,7 @@ import { Public } from "src/auth/decorators/public.decorator";
 import { ExtendedAd } from "../dto/extended-ad.dto";
 import { User } from "src/auth/decorators/user.decorator";
 import { UserEntity } from "src/users/model/User.entity";
-import { ParseIdPipe } from "src/validation/pipes/parseId.pipe";
+import { ParseIdPipe } from "src/validation/pipes/parse-id.pipe";
 
 @UseGuards(AuthGuard)
 @Controller("ads")

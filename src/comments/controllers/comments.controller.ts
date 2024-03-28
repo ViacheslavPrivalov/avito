@@ -5,7 +5,7 @@ import { AuthGuard } from "src/auth/guards/auth.guard";
 import { Comment } from "../dto/comment.dto";
 import { UserEntity } from "src/users/model/User.entity";
 import { User } from "src/auth/decorators/user.decorator";
-import { ParseIdPipe } from "src/validation/pipes/parseId.pipe";
+import { ParseIdPipe } from "src/validation/pipes/parse-id.pipe";
 
 @UseGuards(AuthGuard)
 @Controller("ads")

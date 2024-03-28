@@ -8,6 +8,7 @@ import { User } from "../dto/user.dto";
 import { UsersMapper } from "../mappers/users.mapper";
 import * as bcrypt from "bcrypt";
 import { ImagesService } from "src/files/services/images.service";
+import { UserNotFoundException } from "src/validation/exceptions/user-not-found.exception";
 
 @Injectable()
 export class UsersService {
@@ -61,6 +62,8 @@ export class UsersService {
     const user: UserEntity = await this.usersRepository.findOne({
       where: { username },
     });
+
+    if (!user) throw new UserNotFoundException();
 
     return user;
   }

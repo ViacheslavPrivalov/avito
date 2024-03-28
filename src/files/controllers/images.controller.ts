@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from "@nestjs/common";
 import { ImagesService } from "../services/images.service";
-import { ParseIdPipe } from "src/validation/pipes/parseId.pipe";
+import { ParseIdPipe } from "src/validation/pipes/parse-id.pipe";
 
 @Controller("image")
 export class ImagesController {

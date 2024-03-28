@@ -2,6 +2,7 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { UsersService } from "src/users/services/users.service";
 import * as bcrypt from "bcrypt";
 import { Reflector } from "@nestjs/core";
+import { AuthorizationException } from "src/validation/exceptions/authorization.exception";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -32,14 +33,12 @@ export class AuthGuard implements CanActivate {
       req.user = user;
       return true;
     } catch (error) {
-      throw new UnauthorizedException(error.message);
+      throw new AuthorizationException(error.message);
     }
   }
 
   private async verifyUser(username: string, password: string) {
     const user = await this.usersService.getUserByUsername(username);
-
-    if (!user) throw new Error("Пользователь не был найден");
 
     const isValidPassword = await bcrypt.compare(password, user.password);
 
