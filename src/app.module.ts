@@ -1,13 +1,10 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule } from "@nestjs/config";
 import { UsersModule } from "./users/users.module";
 import { AdsModule } from "./ads/ads.module";
 import { AuthModule } from "./auth/auth.module";
 import { CommentsModule } from "./comments/comments.module";
-import { UserEntity } from "./users/model/User.entity";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import * as path from "path";
 import { FilesModule } from "./files/files.module";
@@ -37,7 +34,7 @@ import { FilesModule } from "./files/files.module";
     CommentsModule,
     FilesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

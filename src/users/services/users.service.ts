@@ -19,7 +19,7 @@ export class UsersService {
     private imagesService: ImagesService
   ) {}
 
-  async setPassword(newPassword: NewPassword, user: UserEntity) {
+  async setPassword(newPassword: NewPassword, user: UserEntity): Promise<void> {
     try {
       const isValidPassword = await bcrypt.compare(newPassword.currentPassword, user.password);
 
@@ -47,7 +47,7 @@ export class UsersService {
 
     return updateUser;
   }
-  async updateUserImage(image: Express.Multer.File, user: UserEntity) {
+  async updateUserImage(image: Express.Multer.File, user: UserEntity): Promise<void> {
     if (user.photo) {
       const imageIdToUpdate = Number(user.photo.slice(-1));
       await this.imagesService.updateImage(imageIdToUpdate, image);

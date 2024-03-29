@@ -13,7 +13,7 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post("set_password")
-  setPassword(@Body() newPassword: NewPassword, @User() user: UserEntity) {
+  setPassword(@Body() newPassword: NewPassword, @User() user: UserEntity): Promise<void> {
     return this.usersService.setPassword(newPassword, user);
   }
 
@@ -29,7 +29,7 @@ export class UsersController {
 
   @Patch("me/image")
   @UseInterceptors(FileInterceptor("image"))
-  updateUserImage(@UploadedFile() image: Express.Multer.File, @User() user: UserEntity) {
+  updateUserImage(@UploadedFile() image: Express.Multer.File, @User() user: UserEntity): Promise<void> {
     return this.usersService.updateUserImage(image, user);
   }
 }

@@ -6,6 +6,7 @@ import { Comment } from "../dto/comment.dto";
 import { UserEntity } from "src/users/model/User.entity";
 import { User } from "src/auth/decorators/user.decorator";
 import { ParseIdPipe } from "src/validation/pipes/parse-id.pipe";
+import { Comments } from "../dto/comments.dto";
 
 @UseGuards(AuthGuard)
 @Controller("ads")
@@ -13,7 +14,7 @@ export class CommentsController {
   constructor(private commentsService: CommentsService) {}
 
   @Get(":id/comments")
-  getComments(@Param("id", ParseIdPipe) id: number) {
+  getComments(@Param("id", ParseIdPipe) id: number): Promise<Comments> {
     return this.commentsService.getComments(id);
   }
 
@@ -31,7 +32,7 @@ export class CommentsController {
     @Param("adId", ParseIdPipe) adId: number,
     @Param("commentId", ParseIdPipe) commentId: number,
     @User() user: UserEntity
-  ) {
+  ): Promise<void> {
     return this.commentsService.deleteComment(adId, commentId, user);
   }
 
@@ -41,7 +42,7 @@ export class CommentsController {
     @Param("commentId", ParseIdPipe) commentId: number,
     @Body() dto: CreateOrUpdateComment,
     @User() user: UserEntity
-  ) {
+  ): Promise<Comment> {
     return this.commentsService.updateComment(adId, commentId, dto, user);
   }
 }

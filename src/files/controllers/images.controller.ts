@@ -7,7 +7,7 @@ export class ImagesController {
   constructor(private imagesService: ImagesService) {}
 
   @Get(":id")
-  getImage(@Param("id", ParseIdPipe) id: number) {
+  getImage(@Param("id", ParseIdPipe) id: number): Promise<string | Buffer> {
     return this.imagesService.getImage(id);
   }
 }

@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { CreateOrUpdateComment } from "../dto/create-or-update-comment.dto";
 import { UserEntity } from "src/users/model/User.entity";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -9,6 +9,8 @@ import { Comment } from "../dto/comment.dto";
 import { AdsService } from "src/ads/services/ads.service";
 import { Action, CaslAbilityFactory } from "src/auth/services/casl-ability.factory";
 import { CommentNotFoundException } from "src/validation/exceptions/comment-not-found.exception";
+import { AccessNotAllowedException } from "src/validation/exceptions/access-not-allowed.exception";
+import { Comments } from "../dto/comments.dto";
 
 @Injectable()
 export class CommentsService {
@@ -19,7 +21,7 @@ export class CommentsService {
     private commentsMapper: CommentsMapper
   ) {}
 
-  async getComments(id: number) {
+  async getComments(id: number): Promise<Comments> {
     const [entities, count] = await this.commentsRepository.findAndCount({
       relations: { author: true },
       where: {
@@ -45,20 +47,18 @@ export class CommentsService {
     return this.commentsMapper.toCommentDto(newComment);
   }
 
-  async deleteComment(adId: number, commentId: number, user: UserEntity) {
+  async deleteComment(adId: number, commentId: number, user: UserEntity): Promise<void> {
     const comment = await this.getCommentById(adId, commentId);
 
-    if (!this.isAllowed(Action.Delete, comment, user))
-      throw new ForbiddenException("У вас нет прав доступа или комментарий вам не принадлежит");
+    this.isAllowed(Action.Delete, comment, user);
 
     await this.commentsRepository.remove(comment);
   }
 
-  async updateComment(adId: number, commentId: number, dto: CreateOrUpdateComment, user: UserEntity) {
+  async updateComment(adId: number, commentId: number, dto: CreateOrUpdateComment, user: UserEntity): Promise<Comment> {
     const comment = await this.getCommentById(adId, commentId);
 
-    if (!this.isAllowed(Action.Update, comment, user))
-      throw new ForbiddenException("У вас нет прав доступа или комментарий вам не принадлежит");
+    this.isAllowed(Action.Update, comment, user);
 
     comment.text = dto.text;
 
@@ -78,9 +78,10 @@ export class CommentsService {
     return commentEntity;
   }
 
-  private isAllowed(action: Action, commentEntity: CommentEntity, user: UserEntity): boolean {
+  private isAllowed(action: Action, commentEntity: CommentEntity, user: UserEntity): void {
     const ability = this.caslAbilityFactory.createForUser(user);
 
-    return ability.can(action, commentEntity);
+    if (!ability.can(action, commentEntity))
+      throw new AccessNotAllowedException("У вас нет прав доступа или комментарий вам не принадлежит");
   }
 }

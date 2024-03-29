@@ -12,7 +12,7 @@ export class ImagesService {
 
   constructor(@InjectRepository(ImageEntity) private imageRepository: Repository<ImageEntity>) {}
 
-  async saveImage(file: Express.Multer.File) {
+  async saveImage(file: Express.Multer.File): Promise<ImageEntity> {
     try {
       const filename = uuid.v4() + ".jpg";
 
@@ -29,7 +29,7 @@ export class ImagesService {
     }
   }
 
-  async updateImage(imageId: number, image: Express.Multer.File) {
+  async updateImage(imageId: number, image: Express.Multer.File): Promise<ImageEntity> {
     const imageToUpdate = await this.imageRepository.findOneBy({ id: imageId });
 
     await this.saveImageOnDisk(imageToUpdate.filename, image.buffer);
@@ -39,7 +39,7 @@ export class ImagesService {
     return await this.imageRepository.save(imageToUpdate);
   }
 
-  async getImage(id: number) {
+  async getImage(id: number): Promise<string | Buffer> {
     const image = await this.imageRepository.findOneBy({ id });
 
     try {
@@ -50,7 +50,7 @@ export class ImagesService {
     }
   }
 
-  private async saveImageOnDisk(filename: string, buffer: Buffer) {
+  private async saveImageOnDisk(filename: string, buffer: Buffer): Promise<void> {
     try {
       await fs.access(this.FILE_PATH);
     } catch (error) {

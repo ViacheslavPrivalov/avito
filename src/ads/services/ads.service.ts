@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { CreateOrUpdateAd } from "../dto/create-or-update-ad.dto";
 import { UserEntity } from "src/users/model/User.entity";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -11,6 +11,7 @@ import { ExtendedAd } from "../dto/extended-ad.dto";
 import { ImagesService } from "src/files/services/images.service";
 import { Action, CaslAbilityFactory } from "src/auth/services/casl-ability.factory";
 import { AdNotFoundException } from "src/validation/exceptions/ad-not-found.exception";
+import { AccessNotAllowedException } from "src/validation/exceptions/access-not-allowed.exception";
 
 @Injectable()
 export class AdsService {
@@ -59,20 +60,18 @@ export class AdsService {
     return this.adsMapper.toExtendedAdDto(adEntity);
   }
 
-  async removeAd(id: number, user: UserEntity) {
+  async removeAd(id: number, user: UserEntity): Promise<void> {
     const adEntity = await this.getAdById(id);
 
-    if (!this.isAllowed(Action.Delete, adEntity, user))
-      throw new ForbiddenException("У вас нет прав доступа или объявление вам не принадлежит");
+    this.isAllowed(Action.Delete, adEntity, user);
 
     await this.adsRepository.remove(adEntity);
   }
 
-  async updateAds(id: number, dto: CreateOrUpdateAd, user: UserEntity) {
+  async updateAds(id: number, dto: CreateOrUpdateAd, user: UserEntity): Promise<Ad> {
     const adEntity = await this.getAdById(id);
 
-    if (!this.isAllowed(Action.Update, adEntity, user))
-      throw new ForbiddenException("У вас нет прав доступа или объявление вам не принадлежит");
+    this.isAllowed(Action.Update, adEntity, user);
 
     for (const prop in dto) {
       adEntity[prop] = dto[prop];
@@ -83,11 +82,10 @@ export class AdsService {
     return this.adsMapper.toAdDto(adEntity);
   }
 
-  async updateImage(id: number, image: Express.Multer.File, user: UserEntity) {
+  async updateImage(id: number, image: Express.Multer.File, user: UserEntity): Promise<Buffer> {
     const adEntity = await this.getAdById(id);
 
-    if (!this.isAllowed(Action.Update, adEntity, user))
-      throw new ForbiddenException("У вас нет прав доступа или объявление вам не принадлежит");
+    this.isAllowed(Action.Update, adEntity, user);
 
     const imageIdToUpdate = Number(adEntity.image.slice(-1));
     const updatedAdImage = await this.imagesService.updateImage(imageIdToUpdate, image);
@@ -108,9 +106,10 @@ export class AdsService {
     return adEntity;
   }
 
-  private isAllowed(action: Action, adEntity: AdEntity, user: UserEntity): boolean {
+  private isAllowed(action: Action, adEntity: AdEntity, user: UserEntity): void {
     const ability = this.caslAbilityFactory.createForUser(user);
 
-    return ability.can(action, adEntity);
+    if (!ability.can(action, adEntity))
+      throw new AccessNotAllowedException("У вас нет прав доступа или объявление вам не принадлежит");
   }
 }

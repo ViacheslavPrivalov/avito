@@ -8,13 +8,13 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post("register")
-  register(@Body() dto: Register) {
+  register(@Body() dto: Register): Promise<void> {
     return this.authService.register(dto);
   }
 
   @Post("login")
   @HttpCode(200)
-  login(@Body() dto: Login) {
+  login(@Body() dto: Login): Promise<void> {
     return this.authService.login(dto);
   }
 }

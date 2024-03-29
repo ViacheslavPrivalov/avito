@@ -15,7 +15,7 @@ export class AuthService {
     private usersRepository: Repository<UserEntity>
   ) {}
 
-  async register(dto: Register) {
+  async register(dto: Register): Promise<void> {
     const candidate = await this.usersRepository.findOneBy({ username: dto.username });
 
     if (candidate) {
@@ -31,7 +31,7 @@ export class AuthService {
     await this.usersRepository.save(user);
   }
 
-  async login(dto: Login) {
+  async login(dto: Login): Promise<void> {
     const user = await this.usersRepository.findOneBy({ username: dto.username });
 
     if (!user) throw new AuthorizationException("Неверный email");
