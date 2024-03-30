@@ -7,18 +7,31 @@ import { UserEntity } from "src/users/model/User.entity";
 import { User } from "src/auth/decorators/user.decorator";
 import { ParseIdPipe } from "src/validation/pipes/parse-id.pipe";
 import { Comments } from "../dto/comments.dto";
+import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Комментарии")
 @UseGuards(AuthGuard)
 @Controller("ads")
 export class CommentsController {
   constructor(private commentsService: CommentsService) {}
 
   @Get(":id/comments")
+  @ApiOperation({ summary: "Получение комментариев объявления" })
+  @ApiParam({ name: "id", required: true })
+  @ApiResponse({ status: 200, description: "OK" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 404, description: "Not found" })
   getComments(@Param("id", ParseIdPipe) id: number): Promise<Comments> {
     return this.commentsService.getComments(id);
   }
 
   @Post(":id/comments")
+  @ApiOperation({ summary: "Добавление комментария к объявлению" })
+  @ApiParam({ name: "id", required: true })
+  @ApiBody({ type: CreateOrUpdateComment })
+  @ApiResponse({ status: 200, description: "OK" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 404, description: "Not found" })
   addComment(
     @Param("id", ParseIdPipe) id: number,
     @Body() dto: CreateOrUpdateComment,
@@ -28,6 +41,13 @@ export class CommentsController {
   }
 
   @Delete(":adId/comments/:commentId")
+  @ApiOperation({ summary: "Удаление комментария" })
+  @ApiParam({ name: "adId", required: true })
+  @ApiParam({ name: "commentId", required: true })
+  @ApiResponse({ status: 200, description: "OK" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 404, description: "Not found" })
   deleteComment(
     @Param("adId", ParseIdPipe) adId: number,
     @Param("commentId", ParseIdPipe) commentId: number,
@@ -37,6 +57,14 @@ export class CommentsController {
   }
 
   @Patch(":adId/comments/:commentId")
+  @ApiOperation({ summary: "Обновление комментария" })
+  @ApiParam({ name: "adId", required: true })
+  @ApiParam({ name: "commentId", required: true })
+  @ApiBody({ type: CreateOrUpdateComment })
+  @ApiResponse({ status: 200, description: "OK", type: Comment })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 404, description: "Not found" })
   updateComment(
     @Param("adId", ParseIdPipe) adId: number,
     @Param("commentId", ParseIdPipe) commentId: number,

@@ -4,32 +4,60 @@ import { NewPassword } from "../dto/new-password.dto";
 import { UpdateUser } from "../dto/update-user.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { AuthGuard } from "src/auth/guards/auth.guard";
-import { UserEntity } from "../model/User.entity";
-import { User } from "src/auth/decorators/user.decorator";
+import { User } from "../dto/user.dto";
+import { ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Пользователи")
 @UseGuards(AuthGuard)
 @Controller("users")
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post("set_password")
-  setPassword(@Body() newPassword: NewPassword, @User() user: UserEntity): Promise<void> {
-    return this.usersService.setPassword(newPassword, user);
+  @ApiOperation({ summary: "Обновление пароля" })
+  @ApiBody({ type: NewPassword })
+  @ApiResponse({ status: 200, description: "OK" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  setPassword(@Body() newPassword: NewPassword, @Request() req): Promise<void> {
+    return this.usersService.setPassword(newPassword, req.user);
   }
 
   @Get("me")
-  getUser(@User() user: UserEntity) {
-    return this.usersService.getUser(user);
+  @ApiOperation({ summary: "Получение информации об авторизованном пользователе" })
+  @ApiResponse({ status: 200, description: "OK", type: User })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  getUser(@Request() req): User {
+    return this.usersService.getUser(req.user);
   }
 
   @Patch("me")
-  updateUser(@Body() updateUser: UpdateUser, @User() user: UserEntity): Promise<UpdateUser> {
-    return this.usersService.updateUser(updateUser, user);
+  @ApiOperation({ summary: "Обновление информации об авторизованном пользователе" })
+  @ApiBody({ type: UpdateUser })
+  @ApiResponse({ status: 200, description: "OK", type: UpdateUser })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  updateUser(@Body() updateUser: UpdateUser, @Request() req): Promise<UpdateUser> {
+    return this.usersService.updateUser(updateUser, req.user);
   }
 
   @Patch("me/image")
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      required: ["image"],
+      type: "object",
+      properties: {
+        image: {
+          type: "string",
+          format: "binary",
+        },
+      },
+    },
+  })
+  @ApiOperation({ summary: "Обновление аватара авторизованного пользователя" })
+  @ApiResponse({ status: 200, description: "OK" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
   @UseInterceptors(FileInterceptor("image"))
-  updateUserImage(@UploadedFile() image: Express.Multer.File, @User() user: UserEntity): Promise<void> {
-    return this.usersService.updateUserImage(image, user);
+  updateUserImage(@UploadedFile() image: Express.Multer.File, @Request() req): Promise<void> {
+    return this.usersService.updateUserImage(image, req.user);
   }
 }

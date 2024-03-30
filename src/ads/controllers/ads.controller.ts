@@ -21,7 +21,9 @@ import { UserEntity } from "src/users/model/User.entity";
 import { ParseIdPipe } from "src/validation/pipes/parse-id.pipe";
 import { Ads } from "../dto/ads.dto";
 import { Ad } from "../dto/ad.dto";
+import { ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiResponse, ApiTags, getSchemaPath } from "@nestjs/swagger";
 
+@ApiTags("Объявления")
 @UseGuards(AuthGuard)
 @Controller("ads")
 export class AdsController {
@@ -29,11 +31,27 @@ export class AdsController {
 
   @Get()
   @Public()
+  @ApiOperation({ summary: "Получение всех объявлений" })
+  @ApiResponse({ status: 200, description: "OK" })
   getAllAds(): Promise<Ads> {
     return this.adsService.getAllAds();
   }
 
   @Post()
+  @ApiOperation({ summary: "Добавление объявления" })
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      required: ["image", "properties"],
+      type: "object",
+      properties: {
+        properties: { $ref: getSchemaPath(CreateOrUpdateAd) },
+        image: { type: "string", format: "binary" },
+      },
+    },
+  })
+  @ApiResponse({ status: 201, description: "Created" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
   @UseInterceptors(FileInterceptor("image"))
   addAd(
     @Body() properties: CreateOrUpdateAd,
@@ -44,21 +62,42 @@ export class AdsController {
   }
 
   @Get("me")
+  @ApiOperation({ summary: "Получение объявлений авторизованного пользователя" })
+  @ApiResponse({ status: 200, description: "OK", type: Ads })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
   getAdsMe(@User() user: UserEntity): Promise<Ads> {
     return this.adsService.getAdsMe(user);
   }
 
   @Get(":id")
+  @ApiOperation({ summary: "Получение информации об объявлении" })
+  @ApiParam({ name: "id", required: true })
+  @ApiResponse({ status: 200, description: "OK", type: ExtendedAd })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 404, description: "Not found" })
   getAds(@Param("id", ParseIdPipe) id: number): Promise<ExtendedAd> {
     return this.adsService.getAds(id);
   }
 
   @Delete(":id")
+  @ApiOperation({ summary: "Удаление объявления" })
+  @ApiParam({ name: "id", required: true })
+  @ApiResponse({ status: 204, description: "No Content" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 404, description: "Not found" })
   removeAd(@Param("id", ParseIdPipe) id: number, @User() user: UserEntity): Promise<void> {
     return this.adsService.removeAd(id, user);
   }
 
   @Patch(":id")
+  @ApiOperation({ summary: "Обновление информации об объявлении" })
+  @ApiParam({ name: "id", required: true })
+  @ApiBody({ type: CreateOrUpdateAd })
+  @ApiResponse({ status: 200, description: "OK", type: Ad })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 404, description: "Not found" })
   updateAds(
     @Param("id", ParseIdPipe) id: number,
     @Body() dto: CreateOrUpdateAd,
@@ -68,6 +107,33 @@ export class AdsController {
   }
 
   @Patch(":id/image")
+  @ApiOperation({ summary: "Обновление картинки объявления" })
+  @ApiParam({ name: "id", required: true })
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      required: ["image"],
+      type: "object",
+      properties: {
+        image: { type: "string", format: "binary" },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: "OK",
+    content: {
+      "application/octet-stream": {
+        schema: {
+          type: "array",
+          items: { type: "string", format: "byte" },
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 404, description: "Not found" })
   @UseInterceptors(FileInterceptor("image"))
   updateImage(
     @Param("id") id: number,
