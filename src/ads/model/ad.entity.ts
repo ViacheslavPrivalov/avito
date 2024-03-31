@@ -16,8 +16,8 @@ export class AdEntity {
   @Column()
   description: string;
 
-  @Column({ nullable: true })
-  image: string;
+  @Column()
+  photo: string;
 
   @Column()
   authorId: number;

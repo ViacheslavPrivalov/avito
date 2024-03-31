@@ -33,7 +33,7 @@ export class AdsService {
 
     const newAd = this.adsRepository.create({
       ...properties,
-      image: `/image/${adImage.id}`,
+      photo: `/image/${adImage.id}`,
       author: user,
     });
 
@@ -65,6 +65,10 @@ export class AdsService {
 
     this.isAllowed(Action.Delete, adEntity, user);
 
+    const imageIdToDelete = Number(adEntity.photo.slice(-1));
+
+    await this.imagesService.deleteImage(imageIdToDelete);
+
     await this.adsRepository.remove(adEntity);
   }
 
@@ -87,7 +91,7 @@ export class AdsService {
 
     this.isAllowed(Action.Update, adEntity, user);
 
-    const imageIdToUpdate = Number(adEntity.image.slice(-1));
+    const imageIdToUpdate = Number(adEntity.photo.slice(-1));
     const updatedAdImage = await this.imagesService.updateImage(imageIdToUpdate, image);
 
     return updatedAdImage.data;

@@ -7,7 +7,7 @@ export class AdsMapper {
   toAdDto(adEntity: AdEntity): Ad {
     const dto: Ad = {
       author: adEntity.author.id,
-      image: adEntity.image,
+      image: adEntity.photo,
       pk: adEntity.id,
       price: adEntity.price,
       title: adEntity.title,
@@ -34,7 +34,7 @@ export class AdsMapper {
       authorLastName: adEntity.author.lastName,
       description: adEntity.description,
       email: adEntity.author.username,
-      image: adEntity.image,
+      image: adEntity.photo,
       phone: adEntity.author.phone,
       price: adEntity.price,
       title: adEntity.title,

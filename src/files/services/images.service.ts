@@ -50,6 +50,13 @@ export class ImagesService {
     }
   }
 
+  async deleteImage(id: number) {
+    const imageEntity = await this.imageRepository.findOneBy({ id });
+    await this.imageRepository.remove(imageEntity);
+
+    await fs.unlink(path.join(this.FILE_PATH, imageEntity.filename));
+  }
+
   private async saveImageOnDisk(filename: string, buffer: Buffer): Promise<void> {
     try {
       await fs.access(this.FILE_PATH);

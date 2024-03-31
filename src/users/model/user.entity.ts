@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { CommentEntity } from "src/comments/model/comment.entity";
 import { AdEntity } from "src/ads/model/ad.entity";
 
