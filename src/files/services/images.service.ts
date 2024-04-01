@@ -6,10 +6,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { ImageEntity } from "../model/image.entity";
 import { Repository } from "typeorm";
 
+export const FILE_PATH = path.resolve(__dirname, "../../..", "static");
+
 @Injectable()
 export class ImagesService {
-  FILE_PATH = path.resolve(__dirname, "../../..", "static");
-
   constructor(@InjectRepository(ImageEntity) private imageRepository: Repository<ImageEntity>) {}
 
   async saveImage(file: Express.Multer.File): Promise<ImageEntity> {
@@ -39,14 +39,18 @@ export class ImagesService {
     return await this.imageRepository.save(imageToUpdate);
   }
 
-  async getImage(id: number): Promise<string | Buffer> {
+  async getImage(id: number) {
     const image = await this.imageRepository.findOneBy({ id });
 
     try {
-      await fs.access(path.join(this.FILE_PATH, image.filename));
+      await fs.access(this.getPathToImages(image.filename));
       return image.filename;
     } catch (error) {
-      return image.data;
+      if (error.code === "ENOENT") {
+        return image.data;
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -54,16 +58,24 @@ export class ImagesService {
     const imageEntity = await this.imageRepository.findOneBy({ id });
     await this.imageRepository.remove(imageEntity);
 
-    await fs.unlink(path.join(this.FILE_PATH, imageEntity.filename));
+    await fs.unlink(this.getPathToImages(imageEntity.filename));
+  }
+
+  getPathToImages(filename: string): string {
+    return path.join(FILE_PATH, filename);
   }
 
   private async saveImageOnDisk(filename: string, buffer: Buffer): Promise<void> {
     try {
-      await fs.access(this.FILE_PATH);
+      await fs.access(FILE_PATH);
     } catch (error) {
-      await fs.mkdir(this.FILE_PATH, { recursive: true });
+      if (error.code === "ENOENT") {
+        await fs.mkdir(FILE_PATH, { recursive: true });
+      } else {
+        throw error;
+      }
     }
 
-    await fs.writeFile(path.join(this.FILE_PATH, filename), buffer);
+    await fs.writeFile(this.getPathToImages(filename), buffer);
   }
 }
