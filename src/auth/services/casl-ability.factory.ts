@@ -2,7 +2,7 @@ import { AbilityBuilder, ExtractSubjectType, InferSubjects, MongoAbility, create
 import { Injectable } from "@nestjs/common";
 import { AdEntity } from "src/ads/model/ad.entity";
 import { CommentEntity } from "src/comments/model/comment.entity";
-import { UserEntity } from "src/users/model/User.entity";
+import { Role, UserEntity } from "src/users/model/User.entity";
 
 export enum Action {
   Manage = "manage",
@@ -21,7 +21,7 @@ export class CaslAbilityFactory {
   createForUser(user: UserEntity): AppAbility {
     const { can, cannot, build } = new AbilityBuilder<AppAbility>(createMongoAbility);
 
-    if (user.role === "admin") {
+    if (user.role === Role.ADMIN) {
       can(Action.Manage, "all");
     } else {
       can(Action.Read, "all");

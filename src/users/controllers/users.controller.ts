@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Patch, Post, Request, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Patch,
+  Post,
+  Request,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from "@nestjs/common";
 import { UsersService } from "../services/users.service";
 import { NewPassword } from "../dto/new-password.dto";
 import { UpdateUser } from "../dto/update-user.dto";
@@ -14,6 +25,7 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post("set_password")
+  @HttpCode(200)
   @ApiOperation({ summary: "Обновление пароля" })
   @ApiBody({ type: NewPassword })
   @ApiResponse({ status: 200, description: "OK" })

@@ -9,6 +9,7 @@ import { UsersMapper } from "../mappers/users.mapper";
 import * as bcrypt from "bcrypt";
 import { ImagesService } from "src/files/services/images.service";
 import { UserNotFoundException } from "src/validation/exceptions/user-not-found.exception";
+import { AccessNotAllowedException } from "src/validation/exceptions/access-not-allowed.exception";
 
 @Injectable()
 export class UsersService {
@@ -30,7 +31,7 @@ export class UsersService {
 
       await this.usersRepository.save(user);
     } catch (error) {
-      throw new ForbiddenException(error.message);
+      throw new AccessNotAllowedException(error.message);
     }
   }
 
@@ -47,6 +48,7 @@ export class UsersService {
 
     return updateUser;
   }
+
   async updateUserImage(image: Express.Multer.File, user: UserEntity): Promise<void> {
     if (user.photo) {
       const imageIdToUpdate = Number(user.photo.slice(-1));

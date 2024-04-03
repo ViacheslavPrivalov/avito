@@ -29,6 +29,6 @@ export class Register {
   readonly phone: string;
 
   @ApiProperty({ enum: Role, description: "роль пользователя" })
-  @IsEnum(Role)
+  @IsEnum(Role, { message: "неверно указана роль пользователя" })
   readonly role: Role;
 }

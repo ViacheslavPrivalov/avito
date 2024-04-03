@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -80,6 +81,7 @@ export class AdsController {
   }
 
   @Delete(":id")
+  @HttpCode(204)
   @ApiOperation({ summary: "Удаление объявления" })
   @ApiParam({ name: "id", required: true })
   @ApiResponse({ status: 204, description: "No Content" })

@@ -20,11 +20,11 @@ export class AuthController {
 
   @ApiTags("Авторизация")
   @Post("login")
+  @HttpCode(200)
   @ApiOperation({ summary: "Авторизация пользователя" })
   @ApiBody({ type: Login })
   @ApiResponse({ status: 200, description: "OK" })
   @ApiResponse({ status: 401, description: "Unauthorized" })
-  @HttpCode(200)
   login(@Body() dto: Login): Promise<void> {
     return this.authService.login(dto);
   }

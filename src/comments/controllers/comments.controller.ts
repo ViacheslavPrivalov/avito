@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Request, UseGuards } from "@nestjs/common";
 import { CommentsService } from "../services/comments.service";
 import { CreateOrUpdateComment } from "../dto/create-or-update-comment.dto";
 import { AuthGuard } from "src/auth/guards/auth.guard";
@@ -26,6 +26,7 @@ export class CommentsController {
   }
 
   @Post(":id/comments")
+  @HttpCode(200)
   @ApiOperation({ summary: "Добавление комментария к объявлению" })
   @ApiParam({ name: "id", required: true })
   @ApiBody({ type: CreateOrUpdateComment })
