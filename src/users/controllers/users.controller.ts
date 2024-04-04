@@ -16,9 +16,10 @@ import { UpdateUser } from "../dto/update-user.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { AuthGuard } from "src/auth/guards/auth.guard";
 import { User } from "../dto/user.dto";
-import { ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBasicAuth, ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Пользователи")
+@ApiBasicAuth()
 @UseGuards(AuthGuard)
 @Controller("users")
 export class UsersController {

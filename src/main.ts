@@ -19,6 +19,7 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
+    .addBasicAuth()
     .setTitle("Avito Project")
     .setDescription("The API description")
     .setVersion("1.0")

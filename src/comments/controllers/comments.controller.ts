@@ -7,9 +7,10 @@ import { UserEntity } from "src/users/model/User.entity";
 import { User } from "src/auth/decorators/user.decorator";
 import { ParseIdPipe } from "src/validation/pipes/parse-id.pipe";
 import { Comments } from "../dto/comments.dto";
-import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiBasicAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Комментарии")
+@ApiBasicAuth()
 @UseGuards(AuthGuard)
 @Controller("ads")
 export class CommentsController {

@@ -22,9 +22,19 @@ import { UserEntity } from "src/users/model/User.entity";
 import { ParseIdPipe } from "src/validation/pipes/parse-id.pipe";
 import { Ads } from "../dto/ads.dto";
 import { Ad } from "../dto/ad.dto";
-import { ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiResponse, ApiTags, getSchemaPath } from "@nestjs/swagger";
+import {
+  ApiBasicAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+  getSchemaPath,
+} from "@nestjs/swagger";
 
 @ApiTags("Объявления")
+@ApiBasicAuth()
 @UseGuards(AuthGuard)
 @Controller("ads")
 export class AdsController {
@@ -55,11 +65,12 @@ export class AdsController {
   @ApiResponse({ status: 401, description: "Unauthorized" })
   @UseInterceptors(FileInterceptor("image"))
   addAd(
-    @Body() properties: CreateOrUpdateAd,
+    @Body("properties") properties: string,
     @UploadedFile() image: Express.Multer.File,
     @User() user: UserEntity
   ): Promise<Ad> {
-    return this.adsService.addAd(properties, image, user);
+    const dto: CreateOrUpdateAd = JSON.parse(properties);
+    return this.adsService.addAd(dto, image, user);
   }
 
   @Get("me")
