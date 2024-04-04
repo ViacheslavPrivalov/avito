@@ -7,13 +7,15 @@ import {
   Param,
   Patch,
   Post,
+  Res,
   UploadedFile,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
 import { AdsService } from "../services/ads.service";
 import { CreateOrUpdateAd } from "../dto/create-or-update-ad.dto";
-import { FileInterceptor } from "@nestjs/platform-express";
+import { FileFieldsInterceptor, FileInterceptor } from "@nestjs/platform-express";
 import { AuthGuard } from "src/auth/guards/auth.guard";
 import { Public } from "src/auth/decorators/public.decorator";
 import { ExtendedAd } from "../dto/extended-ad.dto";
@@ -22,16 +24,8 @@ import { UserEntity } from "src/users/model/User.entity";
 import { ParseIdPipe } from "src/validation/pipes/parse-id.pipe";
 import { Ads } from "../dto/ads.dto";
 import { Ad } from "../dto/ad.dto";
-import {
-  ApiBasicAuth,
-  ApiBody,
-  ApiConsumes,
-  ApiOperation,
-  ApiParam,
-  ApiResponse,
-  ApiTags,
-  getSchemaPath,
-} from "@nestjs/swagger";
+import { ApiBasicAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Response } from "express";
 
 @ApiTags("Объявления")
 @ApiBasicAuth()
@@ -48,6 +42,11 @@ export class AdsController {
     return this.adsService.getAllAds();
   }
 
+  // Фронтэнд отправляет properties как строку JSON внутри объекта Blob.
+  // Но по спецификации бекэнд должен получить properties как объект, а не как строку.
+  // Поэтому изменил код бэкенда, чтобы он мог работать с фронтэндом.
+  // Код, соответствующий спецификации, находится в ветке open-api_match
+
   @Post()
   @ApiOperation({ summary: "Добавление объявления" })
   @ApiConsumes("multipart/form-data")
@@ -56,21 +55,29 @@ export class AdsController {
       required: ["image", "properties"],
       type: "object",
       properties: {
-        properties: { $ref: getSchemaPath(CreateOrUpdateAd) },
+        properties: { type: "string", format: "binary" },
         image: { type: "string", format: "binary" },
       },
     },
   })
-  @ApiResponse({ status: 201, description: "Created" })
+  @ApiResponse({ status: 201, description: "Created", type: Ad })
   @ApiResponse({ status: 401, description: "Unauthorized" })
-  @UseInterceptors(FileInterceptor("image"))
-  addAd(
-    @Body("properties") properties: string,
-    @UploadedFile() image: Express.Multer.File,
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: "image", maxCount: 1 },
+      { name: "properties", maxCount: 1 },
+    ])
+  )
+  async addAd(
+    @UploadedFiles() files: { image: Express.Multer.File[]; properties: Express.Multer.File[] },
     @User() user: UserEntity
   ): Promise<Ad> {
-    const dto: CreateOrUpdateAd = JSON.parse(properties);
-    return this.adsService.addAd(dto, image, user);
+    const imageFile = files.image[0];
+    const propertiesFile = files.properties[0];
+
+    const properties: CreateOrUpdateAd = JSON.parse(propertiesFile.buffer.toString());
+
+    return this.adsService.addAd(properties, imageFile, user);
   }
 
   @Get("me")
@@ -148,11 +155,19 @@ export class AdsController {
   @ApiResponse({ status: 403, description: "Forbidden" })
   @ApiResponse({ status: 404, description: "Not found" })
   @UseInterceptors(FileInterceptor("image"))
-  updateImage(
+  async updateImage(
     @Param("id") id: number,
     @UploadedFile() image: Express.Multer.File,
-    @User() user: UserEntity
-  ): Promise<Buffer> {
-    return this.adsService.updateImage(id, image, user);
+    @User() user: UserEntity,
+    @Res() res: Response
+  ): Promise<void> {
+    const data = await this.adsService.updateImage(id, image, user);
+
+    res.writeHead(200, {
+      "Content-Length": Buffer.byteLength(data),
+      "Content-Type": "image/jpeg",
+    });
+
+    res.end(data);
   }
 }
