@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -32,6 +33,7 @@ import {
   ApiTags,
   getSchemaPath,
 } from "@nestjs/swagger";
+import { Response } from "express";
 
 @ApiTags("Объявления")
 @ApiBasicAuth()
@@ -148,11 +150,19 @@ export class AdsController {
   @ApiResponse({ status: 403, description: "Forbidden" })
   @ApiResponse({ status: 404, description: "Not found" })
   @UseInterceptors(FileInterceptor("image"))
-  updateImage(
+  async updateImage(
     @Param("id") id: number,
     @UploadedFile() image: Express.Multer.File,
-    @User() user: UserEntity
-  ): Promise<Buffer> {
-    return this.adsService.updateImage(id, image, user);
+    @User() user: UserEntity,
+    @Res() res: Response
+  ): Promise<void> {
+    const data = await this.adsService.updateImage(id, image, user);
+
+    res.writeHead(200, {
+      "Content-Length": Buffer.byteLength(data),
+      "Content-Type": "image/jpeg",
+    });
+
+    res.end(data);
   }
 }
