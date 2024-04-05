@@ -4,7 +4,7 @@ import { UsersService } from "./services/users.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserEntity } from "./model/User.entity";
 import { UsersMapper } from "./mappers/users.mapper";
-import { FilesModule } from "src/files/files.module";
+import { FilesModule } from "../files/files.module";
 
 @Module({
   controllers: [UsersController],

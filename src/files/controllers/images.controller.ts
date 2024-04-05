@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Res } from "@nestjs/common";
 import { ImagesService } from "../services/images.service";
-import { ParseIdPipe } from "src/validation/pipes/parse-id.pipe";
 import { ApiExcludeController } from "@nestjs/swagger";
 import { Response } from "express";
+import { ParseIdPipe } from "../../validation/pipes/parse-id.pipe";
 
 @ApiExcludeController()
 @Controller("image")

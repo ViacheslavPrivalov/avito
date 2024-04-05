@@ -1,16 +1,16 @@
 import { Injectable } from "@nestjs/common";
 import { CreateOrUpdateComment } from "../dto/create-or-update-comment.dto";
-import { UserEntity } from "src/users/model/User.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CommentEntity } from "../model/comment.entity";
 import { Repository } from "typeorm";
 import { CommentsMapper } from "../mappers/comments.mapper";
 import { Comment } from "../dto/comment.dto";
-import { AdsService } from "src/ads/services/ads.service";
-import { Action, CaslAbilityFactory } from "src/auth/services/casl-ability.factory";
-import { CommentNotFoundException } from "src/validation/exceptions/comment-not-found.exception";
-import { AccessNotAllowedException } from "src/validation/exceptions/access-not-allowed.exception";
 import { Comments } from "../dto/comments.dto";
+import { UserEntity } from "../../users/model/User.entity";
+import { AdsService } from "../../ads/services/ads.service";
+import { Action, CaslAbilityFactory } from "../../auth/services/casl-ability.factory";
+import { AccessNotAllowedException } from "../../validation/exceptions/access-not-allowed.exception";
+import { CommentNotFoundException } from "../../validation/exceptions/comment-not-found.exception";
 
 @Injectable()
 export class CommentsService {

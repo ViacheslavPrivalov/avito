@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "../model/User.entity";
 import { Repository } from "typeorm";
@@ -7,9 +7,9 @@ import { UpdateUser } from "../dto/update-user.dto";
 import { User } from "../dto/user.dto";
 import { UsersMapper } from "../mappers/users.mapper";
 import * as bcrypt from "bcrypt";
-import { ImagesService } from "src/files/services/images.service";
-import { UserNotFoundException } from "src/validation/exceptions/user-not-found.exception";
-import { AccessNotAllowedException } from "src/validation/exceptions/access-not-allowed.exception";
+import { ImagesService } from "../../files/services/images.service";
+import { AccessNotAllowedException } from "../../validation/exceptions/access-not-allowed.exception";
+import { UserNotFoundException } from "../../validation/exceptions/user-not-found.exception";
 
 @Injectable()
 export class UsersService {

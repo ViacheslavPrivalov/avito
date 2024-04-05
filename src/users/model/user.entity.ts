@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { CommentEntity } from "src/comments/model/comment.entity";
-import { AdEntity } from "src/ads/model/ad.entity";
+import { CommentEntity } from "../../comments/model/comment.entity";
+import { AdEntity } from "../../ads/model/ad.entity";
 
 export enum Role {
   USER = "USER",

@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsEnum, IsString, Length, Matches } from "class-validator";
-import { Role } from "src/users/model/User.entity";
+import { Role } from "../../users/model/User.entity";
 
 export class Register {
   @ApiProperty({ description: "логин" })

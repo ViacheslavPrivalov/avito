@@ -1,12 +1,11 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { UserEntity } from "src/users/model/User.entity";
 import { Repository } from "typeorm";
 import { Register } from "../dto/register.dto";
 import * as bcrypt from "bcrypt";
 import { Login } from "../dto/login.dto";
-import { UsersService } from "src/users/services/users.service";
-import { AuthorizationException } from "src/validation/exceptions/authorization.exception";
+import { UserEntity } from "../../users/model/User.entity";
+import { AuthorizationException } from "../../validation/exceptions/authorization.exception";
 
 @Injectable()
 export class AuthService {

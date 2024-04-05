@@ -1,13 +1,13 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Request, UseGuards } from "@nestjs/common";
 import { CommentsService } from "../services/comments.service";
 import { CreateOrUpdateComment } from "../dto/create-or-update-comment.dto";
-import { AuthGuard } from "src/auth/guards/auth.guard";
 import { Comment } from "../dto/comment.dto";
-import { UserEntity } from "src/users/model/User.entity";
-import { User } from "src/auth/decorators/user.decorator";
-import { ParseIdPipe } from "src/validation/pipes/parse-id.pipe";
 import { Comments } from "../dto/comments.dto";
 import { ApiBasicAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { AuthGuard } from "../../auth/guards/auth.guard";
+import { UserEntity } from "../../users/model/User.entity";
+import { User } from "../../auth/decorators/user.decorator";
+import { ParseIdPipe } from "../../validation/pipes/parse-id.pipe";
 
 @ApiTags("Комментарии")
 @ApiBasicAuth()

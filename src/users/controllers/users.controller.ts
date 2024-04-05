@@ -14,9 +14,9 @@ import { UsersService } from "../services/users.service";
 import { NewPassword } from "../dto/new-password.dto";
 import { UpdateUser } from "../dto/update-user.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { AuthGuard } from "src/auth/guards/auth.guard";
 import { User } from "../dto/user.dto";
 import { ApiBasicAuth, ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { AuthGuard } from "../../auth/guards/auth.guard";
 
 @ApiTags("Пользователи")
 @ApiBasicAuth()

@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { CreateOrUpdateAd } from "../dto/create-or-update-ad.dto";
-import { UserEntity } from "src/users/model/User.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AdEntity } from "../model/ad.entity";
 import { Repository } from "typeorm";
@@ -8,10 +7,11 @@ import { AdsMapper } from "../mappers/ads.mapper";
 import { Ad } from "../dto/ad.dto";
 import { Ads } from "../dto/ads.dto";
 import { ExtendedAd } from "../dto/extended-ad.dto";
-import { ImagesService } from "src/files/services/images.service";
-import { Action, CaslAbilityFactory } from "src/auth/services/casl-ability.factory";
-import { AdNotFoundException } from "src/validation/exceptions/ad-not-found.exception";
-import { AccessNotAllowedException } from "src/validation/exceptions/access-not-allowed.exception";
+import { UserEntity } from "../../users/model/User.entity";
+import { ImagesService } from "../../files/services/images.service";
+import { Action, CaslAbilityFactory } from "../../auth/services/casl-ability.factory";
+import { AccessNotAllowedException } from "../../validation/exceptions/access-not-allowed.exception";
+import { AdNotFoundException } from "../../validation/exceptions/ad-not-found.exception";
 
 @Injectable()
 export class AdsService {

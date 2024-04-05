@@ -16,16 +16,16 @@ import {
 import { AdsService } from "../services/ads.service";
 import { CreateOrUpdateAd } from "../dto/create-or-update-ad.dto";
 import { FileFieldsInterceptor, FileInterceptor } from "@nestjs/platform-express";
-import { AuthGuard } from "src/auth/guards/auth.guard";
-import { Public } from "src/auth/decorators/public.decorator";
 import { ExtendedAd } from "../dto/extended-ad.dto";
-import { User } from "src/auth/decorators/user.decorator";
-import { UserEntity } from "src/users/model/User.entity";
-import { ParseIdPipe } from "src/validation/pipes/parse-id.pipe";
 import { Ads } from "../dto/ads.dto";
 import { Ad } from "../dto/ad.dto";
 import { ApiBasicAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
+import { Public } from "../../auth/decorators/public.decorator";
+import { AuthGuard } from "../../auth/guards/auth.guard";
+import { UserEntity } from "../../users/model/User.entity";
+import { ParseIdPipe } from "../../validation/pipes/parse-id.pipe";
+import { User } from "../../auth/decorators/user.decorator";
 
 @ApiTags("Объявления")
 @ApiBasicAuth()

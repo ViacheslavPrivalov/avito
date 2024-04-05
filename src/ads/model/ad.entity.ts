@@ -1,6 +1,6 @@
-import { CommentEntity } from "src/comments/model/comment.entity";
-import { UserEntity } from "src/users/model/User.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { CommentEntity } from "../../comments/model/comment.entity";
+import { UserEntity } from "../../users/model/User.entity";
 
 @Entity({ name: "ads" })
 export class AdEntity {

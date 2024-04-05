@@ -1,9 +1,8 @@
-import { Module, forwardRef } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { AuthController } from "./controllers/auth.controller";
 import { AuthService } from "./services/auth.service";
-import { UsersModule } from "src/users/users.module";
-import { AdsModule } from "src/ads/ads.module";
 import { CaslAbilityFactory } from "./services/casl-ability.factory";
+import { UsersModule } from "../users/users.module";
 
 @Module({
   controllers: [AuthController],

@@ -4,9 +4,9 @@ import { AdsService } from "./services/ads.service";
 import { AdsMapper } from "./mappers/ads.mapper";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AdEntity } from "./model/ad.entity";
-import { UsersModule } from "src/users/users.module";
-import { FilesModule } from "src/files/files.module";
-import { AuthModule } from "src/auth/auth.module";
+import { AuthModule } from "../auth/auth.module";
+import { FilesModule } from "../files/files.module";
+import { UsersModule } from "../users/users.module";
 
 @Module({
   controllers: [AdsController],

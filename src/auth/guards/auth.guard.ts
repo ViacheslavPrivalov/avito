@@ -1,8 +1,8 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
-import { UsersService } from "src/users/services/users.service";
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
 import { Reflector } from "@nestjs/core";
-import { AuthorizationException } from "src/validation/exceptions/authorization.exception";
+import { UsersService } from "../../users/services/users.service";
+import { AuthorizationException } from "../../validation/exceptions/authorization.exception";
 
 @Injectable()
 export class AuthGuard implements CanActivate {

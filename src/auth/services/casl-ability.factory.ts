@@ -1,8 +1,8 @@
 import { AbilityBuilder, ExtractSubjectType, InferSubjects, MongoAbility, createMongoAbility } from "@casl/ability";
 import { Injectable } from "@nestjs/common";
-import { AdEntity } from "src/ads/model/ad.entity";
-import { CommentEntity } from "src/comments/model/comment.entity";
-import { Role, UserEntity } from "src/users/model/User.entity";
+import { AdEntity } from "../../ads/model/ad.entity";
+import { CommentEntity } from "../../comments/model/comment.entity";
+import { UserEntity, Role } from "../../users/model/User.entity";
 
 export enum Action {
   Manage = "manage",
