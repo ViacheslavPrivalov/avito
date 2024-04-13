@@ -1,10 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, Length } from "class-validator";
+import { IsEmail, IsString, Length } from "class-validator";
 
 export class Login {
   @ApiProperty({ description: "логин" })
-  @IsString()
   @Length(4, 32, { message: "Ваш email должен быть от 4 до 32 символов" })
+  @IsEmail({}, { message: "Введите корректный email" })
   readonly username: string;
 
   @ApiProperty({ description: "пароль" })

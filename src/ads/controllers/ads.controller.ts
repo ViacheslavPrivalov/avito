@@ -156,7 +156,7 @@ export class AdsController {
   @ApiResponse({ status: 404, description: "Not found" })
   @UseInterceptors(FileInterceptor("image"))
   async updateImage(
-    @Param("id") id: number,
+    @Param("id", ParseIdPipe) id: number,
     @UploadedFile() image: Express.Multer.File,
     @User() user: UserEntity,
     @Res() res: Response
