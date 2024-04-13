@@ -1,73 +1,96 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Бэкенд-часть платформы по перепродаже вещей
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Описание
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Для проекта платформы по перепродаже вещей была написана BackEnd часть на Node JS, с использованием фреймворка [Nest](https://nestjs.com/).
 
-## Description
+По заданной OpenAPI спецификации был реализован следующий функционал:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Авторизация и аутентификация пользователей.
+- Распределение ролей между пользователями: пользователь и администратор.
+- CRUD-операции для объявлений и комментариев: администратор может удалять или
+  редактировать все объявления и комментарии, а пользователи — только свои.
+- Возможность для пользователей оставлять комментарии под каждым объявлением.
+  Показ и сохранение картинок объявлений, а также аватарок пользователей.
 
-## Installation
+## Установка
+
+### Установка бэкенда
+
+1. **Клонирование репозитория**: Сначала клонируйте репозиторий на свой локальный компьютер с помощью команды `git clone`. Замените `URL` на URL вашего репозитория:
+
+   ```bash
+   git clone URL
+   ```
+
+2. **Установка зависимостей**: Перейдите в каталог проекта и установите необходимые зависимости с помощью команды `npm install`:
+
+   ```bash
+   cd имя-вашего-проекта
+   npm install
+   ```
+
+3. **Запуск проекта**: Запустите проект с помощью команды `npm run start`:
+
+   ```bash
+   npm run start
+   ```
+
+### Установка и запуск фронтенда
+
+Для проекта платформы по перепродаже вещей создана фронтенд-часть сайта. Чтобы её использовать вам нужно установить [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+
+1. **Установка Docker**: Для установки [Docker](https://www.docker.com/) на ваш компьютер нужно установить Docker Desktop.
+
+2. **Запуск фронтенда с помощью Docker**: Чтобы запустить фронтенд с помощью установленного Docker, нужно открыть командную строку (или терминал) и выполнить следующую команду:
+
+   ```bash
+   docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.21
+   ```
+
+После выполнения команды frontend запустится на порту 3000 и можно будет зайти на него через браузер по адресу: `http://localhost:3000`
+
+После выполнения этих шагов ваше приложение должно быть успешно установлено и запущено.
+
+Документация API доступна по адресу: `http://localhost:8080/api`
+
+## Стек технологий
+
+В этом проекте используются следующие технологии:
+
+- NestJS
+- PostgreSQL
+- TypeORM
+- CASL
+- Class-transformer
+- Class-validator
+- Swagger
+- Jest
+- Supertest
+- Automock
+
+## Лицензия
+
+Данный проект создан в учебных целях. Допускается использование данного кода в полном или частичном объеме в других проектах.
+
+## Функциональность
+
+**Приложение обеспечивает:**
+
+- Создание необходимых сущностей: пользователь, объявление, комментарий в базе данных _PostrgeSQL_ посредством _TypeORM_;
+- Авторизацию и аутентификацию пользователей с помощью _AuthGuard_ с Basic аутентификацией в формате:
 
 ```bash
-$ npm install
+Authorization: Basic base64Encode(user:password)
 ```
 
-## Running the app
+- Управление объявлениями и комментариями, контроль доступа на основе ролей (пользователь, администратор) с помощью библиотеки _CASL_;
+- Валидацию данных с помощью собственной реализации _ValidationPipe_ в связке с _class-validator_ и _class-transformer_;
+- Обработку возникающих ошибок и исключений с помощью _AllExceptionsFilter_;
+- Логирование запросов и ответов, а также всех исключений при помощи _LoggerMiddleware_;
 
-```bash
-# development
-$ npm run start
+**Допольнительно**
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+- Хранение и извлечение изображений объявлений и аватарок пользователей в базе данных и локально в файловой системе;
+- Реализованы unit-тесты для контроллеров и сервисов;
+- E2E-тесты покрывают основные модули приложения.
