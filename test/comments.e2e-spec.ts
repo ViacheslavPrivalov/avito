@@ -9,7 +9,6 @@ import { getRepositoryToken } from "@nestjs/typeorm";
 import { UserEntity } from "../src/users/model/User.entity";
 import { CommentEntity } from "../src/comments/model/comment.entity";
 import { ImageEntity } from "../src/files/model/image.entity";
-import { AdsService } from "../src/ads/services/ads.service";
 import { AdEntity } from "../src/ads/model/ad.entity";
 
 describe("CommentsController (e2e)", () => {
@@ -45,16 +44,6 @@ describe("CommentsController (e2e)", () => {
     author: mockUser,
     authorId: 1,
   };
-
-  // const mockAdsService = {
-  //   getAdById: jest.fn().mockImplementation((id) => {
-  //     if (id === 1) {
-  //       return Promise.resolve(mockAd);
-  //     } else {
-  //       return Promise.resolve(null);
-  //     }
-  //   }),
-  // };
 
   const mockAdsRepository = {
     findOne: jest.fn().mockImplementation((id) => {
