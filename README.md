@@ -38,14 +38,14 @@
 
 ### Установка и запуск фронтенда
 
-Для проекта платформы по перепродаже вещей создана фронтенд-часть сайта. Чтобы её использовать вам нужно установить [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+Для проекта платформы по перепродаже вещей создана [фронтенд-часть](https://github.com/dmitry-bizin/front-react-avito) сайта. Чтобы её использовать вам нужно установить [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
 1. **Установка Docker**: Для установки [Docker](https://www.docker.com/) на ваш компьютер нужно установить Docker Desktop.
 
 2. **Запуск фронтенда с помощью Docker**: Чтобы запустить фронтенд с помощью установленного Docker, нужно открыть командную строку (или терминал) и выполнить следующую команду:
 
    ```bash
-   docker run -p 3000:3000 --rm ghcr.io/bizinmitya/front-react-avito:v1.21
+   docker run -p 3000:3000 --rm ghcr.io/dmitry-bizin/front-react-avito:v1.21
    ```
 
 После выполнения команды frontend запустится на порту 3000 и можно будет зайти на него через браузер по адресу: `http://localhost:3000`
