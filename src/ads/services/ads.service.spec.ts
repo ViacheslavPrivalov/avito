@@ -7,7 +7,7 @@ import { AdsMapper } from "../mappers/ads.mapper";
 import { AdEntity } from "../model/ad.entity";
 import { Ads } from "../dto/ads.dto";
 import { CreateOrUpdateAd } from "../dto/create-or-update-ad.dto";
-import { UserEntity } from "../../users/model/User.entity";
+import { UserEntity } from "../../users/model/user.entity";
 import { Ad } from "../dto/ad.dto";
 import { ExtendedAd } from "../dto/extended-ad.dto";
 import { Action, AppAbility, CaslAbilityFactory } from "../../auth/services/casl-ability.factory";

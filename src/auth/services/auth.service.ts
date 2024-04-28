@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { Register } from "../dto/register.dto";
 import * as bcrypt from "bcrypt";
 import { Login } from "../dto/login.dto";
-import { UserEntity } from "../../users/model/User.entity";
+import { UserEntity } from "../../users/model/user.entity";
 import { AuthorizationException } from "../../validation/exceptions/authorization.exception";
 
 @Injectable()

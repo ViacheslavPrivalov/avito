@@ -2,7 +2,7 @@ import { AbilityBuilder, ExtractSubjectType, InferSubjects, MongoAbility, create
 import { Injectable } from "@nestjs/common";
 import { AdEntity } from "../../ads/model/ad.entity";
 import { CommentEntity } from "../../comments/model/comment.entity";
-import { UserEntity, Role } from "../../users/model/User.entity";
+import { UserEntity, Role } from "../../users/model/user.entity";
 
 export enum Action {
   Manage = "manage",

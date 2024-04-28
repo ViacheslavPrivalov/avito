@@ -7,7 +7,7 @@ import { AdsMapper } from "../mappers/ads.mapper";
 import { Ad } from "../dto/ad.dto";
 import { Ads } from "../dto/ads.dto";
 import { ExtendedAd } from "../dto/extended-ad.dto";
-import { UserEntity } from "../../users/model/User.entity";
+import { UserEntity } from "../../users/model/user.entity";
 import { ImagesService } from "../../files/services/images.service";
 import { Action, CaslAbilityFactory } from "../../auth/services/casl-ability.factory";
 import { AccessNotAllowedException } from "../../validation/exceptions/access-not-allowed.exception";

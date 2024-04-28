@@ -6,7 +6,7 @@ import { ImagesService } from "../../files/services/images.service";
 import { Action, AppAbility, CaslAbilityFactory } from "../../auth/services/casl-ability.factory";
 import { TestBed } from "@automock/jest";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { UserEntity } from "../../users/model/User.entity";
+import { UserEntity } from "../../users/model/user.entity";
 import { AdEntity } from "../../ads/model/ad.entity";
 import { Comments } from "../dto/comments.dto";
 import { CreateOrUpdateComment } from "../dto/create-or-update-comment.dto";
