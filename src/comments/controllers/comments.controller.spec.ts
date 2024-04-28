@@ -1,7 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { CommentsController } from "./comments.controller";
 import { CommentsService } from "../services/comments.service";
-import { UserEntity } from "../../users/model/User.entity";
+import { UserEntity } from "../../users/model/user.entity";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { Comments } from "../dto/comments.dto";
 import { Comment } from "../dto/comment.dto";

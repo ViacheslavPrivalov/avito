@@ -23,7 +23,7 @@ import { ApiBasicAuth, ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiResponse
 import { Response } from "express";
 import { Public } from "../../auth/decorators/public.decorator";
 import { AuthGuard } from "../../auth/guards/auth.guard";
-import { UserEntity } from "../../users/model/User.entity";
+import { UserEntity } from "../../users/model/user.entity";
 import { ParseIdPipe } from "../../validation/pipes/parse-id.pipe";
 import { User } from "../../auth/decorators/user.decorator";
 

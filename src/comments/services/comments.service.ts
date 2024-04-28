@@ -6,7 +6,7 @@ import { Repository } from "typeorm";
 import { CommentsMapper } from "../mappers/comments.mapper";
 import { Comment } from "../dto/comment.dto";
 import { Comments } from "../dto/comments.dto";
-import { UserEntity } from "../../users/model/User.entity";
+import { UserEntity } from "../../users/model/user.entity";
 import { AdsService } from "../../ads/services/ads.service";
 import { Action, CaslAbilityFactory } from "../../auth/services/casl-ability.factory";
 import { AccessNotAllowedException } from "../../validation/exceptions/access-not-allowed.exception";

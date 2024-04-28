@@ -1,5 +1,5 @@
 import { User } from "../dto/user.dto";
-import { UserEntity } from "../model/User.entity";
+import { UserEntity } from "../model/user.entity";
 
 export class UsersMapper {
   toUserDto(userEntity: UserEntity): User {

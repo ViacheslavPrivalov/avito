@@ -5,7 +5,7 @@ import { Comment } from "../dto/comment.dto";
 import { Comments } from "../dto/comments.dto";
 import { ApiBasicAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../../auth/guards/auth.guard";
-import { UserEntity } from "../../users/model/User.entity";
+import { UserEntity } from "../../users/model/user.entity";
 import { User } from "../../auth/decorators/user.decorator";
 import { ParseIdPipe } from "../../validation/pipes/parse-id.pipe";
 

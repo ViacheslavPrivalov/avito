@@ -3,7 +3,7 @@ import { AdsController } from "./ads.controller";
 import { AdsService } from "../services/ads.service";
 import { Ads } from "../dto/ads.dto";
 import { Ad } from "../dto/ad.dto";
-import { UserEntity } from "../../users/model/User.entity";
+import { UserEntity } from "../../users/model/user.entity";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { CreateOrUpdateAd } from "../dto/create-or-update-ad.dto";
 import { ExtendedAd } from "../dto/extended-ad.dto";
